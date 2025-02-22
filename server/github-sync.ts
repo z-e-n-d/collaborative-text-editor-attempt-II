@@ -16,10 +16,10 @@ export async function syncContentToGithub() {
     const { execSync } = require('child_process');
     
     // Configure git with credentials
-    execSync(`git config user.name "${process.env.GITHUB_USERNAME}"`);
-    execSync(`git config user.email "${process.env.GITHUB_EMAIL}"`);
+    execSync(`git config user.name "z-e-n-d"`);
+    execSync(`git config user.email "zozo.toth.2021home@gmail.com"`);
     execSync(`git config credential.helper 'store --file=.git/credentials'`);
-    execSync(`echo "https://${process.env.GITHUB_TOKEN}@github.com" > .git/credentials`);
+    execSync(`echo "https://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@github.com" > .git/credentials`);
     
     execSync('git add editor_content.json');
     execSync('git commit -m "Update editor content"');
