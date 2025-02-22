@@ -92,20 +92,29 @@ export default function Editor() {
             </div>
           </div>
 
-          <Card className="border border-primary/20 bg-card/95 backdrop-blur-sm">
-            <div className="p-4">
-              {isLoading ? (
-                <div className="space-y-4">
-                  <Skeleton className="h-6 w-24" />
-                  <Skeleton className="h-32 w-full" />
-                </div>
-              ) : (
-                <CollaborativeEditor initialContent={doc?.content || ""} />
-              )}
-            </div>
-          </Card>
+          <Collapsible>
+  <CollapsibleTrigger asChild>
+    <Button variant="outline" className="w-full mb-2">
+      Toggle Editor
+    </Button>
+  </CollapsibleTrigger>
+  <CollapsibleContent>
+    <Card className="border border-primary/20 bg-card/95 backdrop-blur-sm">
+      <div className="p-4">
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-24" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+        ) : (
+          <CollaborativeEditor initialContent={doc?.content || ""} />
+        )}
+      </div>
+    </Card>
 
-          <ConsoleLog logs={logs} />
+    <ConsoleLog logs={logs} />
+  </CollapsibleContent>
+</Collapsible>
         </div>
       </div>
     </div>
