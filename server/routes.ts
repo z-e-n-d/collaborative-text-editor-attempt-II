@@ -26,6 +26,11 @@ export async function registerRoutes(app: Express) {
     }
 
     const doc = await storage.updateDocument(id, result.data);
+    
+    // Sync content to GitHub after update
+    const { syncContentToGithub } = await import('./github-sync');
+    await syncContentToGithub();
+    
     res.json(doc);
   });
 
