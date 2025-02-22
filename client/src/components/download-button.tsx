@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Folder, FileIcon } from "lucide-react";
@@ -18,7 +19,8 @@ export function DownloadButton() {
     // Add files to zip
     const content = document.querySelector('.ProseMirror')?.innerHTML || '';
     zip.file("content.html", content);
-    
+
+    // Delay to allow animation to complete
     setTimeout(async () => {
       // Generate zip
       const blob = await zip.generateAsync({ type: "blob" });
@@ -29,7 +31,7 @@ export function DownloadButton() {
       a.href = url;
       a.download = "collaborative-editor-content.zip";
       
-      // Trigger download
+      // Trigger download and reset animation
       setShowZip(false);
       setTimeout(() => {
         a.click();
