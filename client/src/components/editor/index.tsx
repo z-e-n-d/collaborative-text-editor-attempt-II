@@ -7,6 +7,8 @@ import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import debounce from "lodash/debounce";
+import Image from "@tiptap/extension-image";
+import Youtube from "@tiptap/extension-youtube";
 
 interface EditorProps {
   initialContent: string;
@@ -36,7 +38,17 @@ export function CollaborativeEditor({ initialContent }: EditorProps) {
   );
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
+      Youtube.configure({
+        controls: true,
+        modestBranding: true,
+      }),
+    ],
     content: initialContent,
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();

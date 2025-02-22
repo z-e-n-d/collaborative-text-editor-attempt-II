@@ -7,21 +7,30 @@ import type { Document } from "@shared/schema";
 import { queryClient } from "@/lib/queryClient";
 import { RefreshCw, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ConsoleLog, type LogEntry } from "@/components/console-log";
+import { useState } from "react";
 
 export default function Editor() {
   const { toast } = useToast();
+  const [logs, setLogs] = useState<LogEntry[]>([]);
   const { data: doc, isLoading, refetch } = useQuery<Document>({
     queryKey: ["/api/document/1"],
   });
 
+  const addLog = (message: string, type: "success" | "error") => {
+    setLogs(prev => [...prev, { message, type, timestamp: new Date() }]);
+  };
+
   const handlePull = async () => {
     try {
       await refetch();
+      addLog("Successfully pulled latest changes", "success");
       toast({
         title: "Changes pulled",
         description: "Document has been updated with the latest changes.",
       });
     } catch (error) {
+      addLog("Failed to pull changes", "error");
       toast({
         variant: "destructive",
         title: "Failed to pull changes",
@@ -33,11 +42,13 @@ export default function Editor() {
   const handlePush = async () => {
     try {
       await queryClient.invalidateQueries({ queryKey: ["/api/document/1"] });
+      addLog("Successfully pushed changes", "success");
       toast({
         title: "Changes pushed",
         description: "Your changes have been saved successfully.",
       });
     } catch (error) {
+      addLog("Failed to push changes", "error");
       toast({
         variant: "destructive",
         title: "Failed to push changes",
@@ -62,18 +73,18 @@ export default function Editor() {
                 variant="outline"
                 size="sm"
                 onClick={handlePull}
-                className="gap-2"
+                className="gap-2 transition-transform hover:scale-105 active:scale-95"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-4 w-4 transition-transform hover:rotate-180" />
                 Pull Changes
               </Button>
               <Button
                 variant="default"
                 size="sm"
                 onClick={handlePush}
-                className="gap-2"
+                className="gap-2 transition-transform hover:scale-105 active:scale-95"
               >
-                <Upload className="h-4 w-4" />
+                <Upload className="h-4 w-4 transition-transform hover:-translate-y-1" />
                 Push Changes
               </Button>
             </div>
@@ -91,6 +102,8 @@ export default function Editor() {
               )}
             </div>
           </Card>
+
+          <ConsoleLog logs={logs} />
         </div>
       </div>
     </div>
