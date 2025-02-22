@@ -14,6 +14,13 @@ export async function syncContentToGithub() {
     
     // Git commands to update the file
     const { execSync } = require('child_process');
+    
+    // Configure git with credentials
+    execSync(`git config user.name "${process.env.GITHUB_USERNAME}"`);
+    execSync(`git config user.email "${process.env.GITHUB_EMAIL}"`);
+    execSync(`git config credential.helper 'store --file=.git/credentials'`);
+    execSync(`echo "https://${process.env.GITHUB_TOKEN}@github.com" > .git/credentials`);
+    
     execSync('git add editor_content.json');
     execSync('git commit -m "Update editor content"');
     execSync('git push');
