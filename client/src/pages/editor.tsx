@@ -11,10 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { ConsoleLog, type LogEntry } from "@/components/console-log";
 import { useState } from "react";
 import { DownloadButton } from "@/components/download-button";
+import { motion } from "framer-motion"; // Added import for Framer Motion
+
 
 export default function Editor() {
   const { toast } = useToast();
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [isAnimating, setIsAnimating] = useState(false); // Added animation state
   const { data: doc, isLoading, refetch } = useQuery<Document>({
     queryKey: ["/api/document/1"],
   });
@@ -60,7 +63,21 @@ export default function Editor() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <motion.div // Wrapped the entire div in motion.div for animation
+      className="min-h-screen bg-background relative overflow-hidden origin-center" // Added origin-center
+      animate={isAnimating ? {
+        rotateX: [0, 45, 90],
+        rotateY: [0, -45, -90],
+        scale: [1, 0.8, 0.5],
+        opacity: [1, 0.8, 0],
+      } : {
+        rotateX: 0,
+        rotateY: 0,
+        scale: 1,
+        opacity: 1,
+      }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
+    >
       {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-primary/20 animate-gradient-slow pointer-events-none" />
 
@@ -90,34 +107,40 @@ export default function Editor() {
                 <Upload className="h-4 w-4 transition-transform hover:-translate-y-1" />
                 Push Changes
               </Button>
+              <Button
+                variant="outline"
+                onClick={() => setIsAnimating(!isAnimating)} //Added button to trigger animation
+              >
+                Fold/Unfold
+              </Button>
             </div>
           </div>
 
           <Collapsible>
-  <CollapsibleTrigger asChild>
-    <Button variant="outline" className="w-full mb-2">
-      Toggle Editor
-    </Button>
-  </CollapsibleTrigger>
-  <CollapsibleContent>
-    <Card className="border border-primary/20 bg-card/95 backdrop-blur-sm">
-      <div className="p-4">
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-6 w-24" />
-            <Skeleton className="h-32 w-full" />
-          </div>
-        ) : (
-          <CollaborativeEditor initialContent={doc?.content || ""} />
-        )}
-      </div>
-    </Card>
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="w-full mb-2">
+                Toggle Editor
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <Card className="border border-primary/20 bg-card/95 backdrop-blur-sm">
+                <div className="p-4">
+                  {isLoading ? (
+                    <div className="space-y-4">
+                      <Skeleton className="h-6 w-24" />
+                      <Skeleton className="h-32 w-full" />
+                    </div>
+                  ) : (
+                    <CollaborativeEditor initialContent={doc?.content || ""} />
+                  )}
+                </div>
+              </Card>
 
-    <ConsoleLog logs={logs} />
-  </CollapsibleContent>
-</Collapsible>
+              <ConsoleLog logs={logs} />
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
