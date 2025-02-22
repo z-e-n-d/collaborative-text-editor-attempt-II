@@ -57,7 +57,7 @@ export function CollaborativeEditor({ initialContent }: EditorProps) {
       <MenuBar editor={editor} />
       <EditorContent 
         editor={editor} 
-        className="prose prose-sm sm:prose-base max-w-none focus:outline-none"
+        className="prose prose-sm sm:prose-base dark:prose-invert max-w-none focus:outline-none"
       />
     </div>
   );
