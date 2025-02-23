@@ -26,14 +26,17 @@ Clone the repository:
 
 
 `` git clone https://github.com/z-e-n-d/collaborative-text-editor-attempt-II.git ``
+
 Install dependencies:
 
 
 `` npm install ``
+
 Start the development server: 
 
 
 `` npm run dev ``
+
 Open your browser and navigate to http://localhost:3000 to use the collaborative text editor.
 
 # Contributing
@@ -46,5 +49,5 @@ If you find this project helpful and would like to support its development, you 
  Donate with PayPal: paypal.me/zltn2 
 
 
-License
+# License
 This project is open source and available under the MIT License.
